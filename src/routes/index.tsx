@@ -1,8 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { AmountDisplay } from '@/components/ui/AmountDisplay'
 import { AccountIcon } from '@/components/ui/AccountIcon'
+import { useAccountBalances } from '@/lib/query/accounts'
+import { Link } from '@tanstack/react-router'
 import {
-  MOCK_ACCOUNTS,
   MOCK_RECENT_TRANSACTIONS,
   MOCK_MONTHLY_SPENDING,
   getNetWorth,
@@ -22,7 +23,13 @@ export const Route = createFileRoute('/')({
 })
 
 function HomePage() {
-  const netWorth = getNetWorth()
+  const { data: accounts } = useAccountBalances()
+
+  // Get real net worth from accounts if available, otherwise mock
+  const realNetWorth = accounts?.reduce((sum, acc) => sum + acc.balance, 0) ?? 0
+  const netWorth =
+    accounts && accounts.length > 0 ? realNetWorth : getNetWorth()
+
   const thisMonth = MOCK_MONTHLY_SPENDING[MOCK_MONTHLY_SPENDING.length - 1]
   const savingsRate = Math.round(
     ((thisMonth.income - thisMonth.expense) / thisMonth.income) * 100,
@@ -126,32 +133,53 @@ function HomePage() {
       <section>
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-sm font-semibold">帳戶</h2>
-          <span className="text-xs text-primary font-medium">查看全部</span>
+          <Link
+            to="/accounts"
+            className="text-xs text-primary font-medium hover:underline"
+          >
+            查看全部
+          </Link>
         </div>
         <div className="space-y-2">
-          {MOCK_ACCOUNTS.map((account) => (
-            <div
-              key={account.id}
-              className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border transition-colors hover:bg-accent/50"
-            >
-              <AccountIcon type={account.type} color={account.color} />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{account.name}</p>
-                <p className="text-xs text-muted-foreground">
-                  {account.type === 'bank'
-                    ? '銀行'
-                    : account.type === 'cash'
-                      ? '現金'
-                      : account.type === 'e_payment'
-                        ? '電子支付'
-                        : account.type === 'credit_card'
-                          ? '信用卡'
-                          : '投資'}
-                </p>
-              </div>
-              <AmountDisplay amount={account.balance} size="sm" />
+          {!accounts || accounts.length === 0 ? (
+            <div className="text-center py-6 text-sm text-muted-foreground border border-dashed border-border rounded-xl">
+              還沒有建立帳戶
             </div>
-          ))}
+          ) : (
+            accounts.slice(0, 3).map((account) => (
+              <Link
+                key={account.id}
+                to="/accounts"
+                className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border transition-colors hover:bg-accent/50 group block w-full text-left"
+              >
+                <div className="group-hover:scale-110 transition-transform">
+                  <AccountIcon
+                    type={account.type}
+                    color={account.color || undefined}
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium truncate">{account.name}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {account.type === 'bank'
+                      ? '銀行'
+                      : account.type === 'cash'
+                        ? '現金'
+                        : account.type === 'e_payment'
+                          ? '電子支付'
+                          : account.type === 'credit_card'
+                            ? '信用卡'
+                            : '投資'}
+                  </p>
+                </div>
+                <AmountDisplay
+                  amount={account.balance}
+                  size="sm"
+                  currency={account.currency}
+                />
+              </Link>
+            ))
+          )}
         </div>
       </section>
 

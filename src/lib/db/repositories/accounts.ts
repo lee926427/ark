@@ -1,5 +1,10 @@
 import type { Database } from 'sql.js'
-import type { Account, CreateAccount, UpdateAccount } from '@/lib/db/types'
+import type {
+  Account,
+  AccountBalance,
+  CreateAccount,
+  UpdateAccount,
+} from '@/lib/db/types'
 
 function generateId(): string {
   const bytes = new Uint8Array(8)
@@ -72,6 +77,19 @@ export class AccountRepository {
     const results: Account[] = []
     while (stmt.step()) {
       results.push(stmt.getAsObject() as unknown as Account)
+    }
+    stmt.free()
+    return results
+  }
+
+  listBalances(): AccountBalance[] {
+    // Note: v_account_balances already filters out archived accounts.
+    const stmt = this.db.prepare(
+      'SELECT * FROM v_account_balances ORDER BY name',
+    )
+    const results: AccountBalance[] = []
+    while (stmt.step()) {
+      results.push(stmt.getAsObject() as unknown as AccountBalance)
     }
     stmt.free()
     return results
