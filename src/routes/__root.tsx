@@ -5,14 +5,12 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
+import { AppShell } from '@/components/layout'
 
-import TanStackQueryProvider from '../integrations/tanstack-query/root-provider'
+import TanStackQueryProvider from '@/integrations/tanstack-query/root-provider'
+import TanStackQueryDevtools from '@/integrations/tanstack-query/devtools'
 
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
-
-import appCss from '../styles.css?url'
+import appCss from '@/styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
 
@@ -25,43 +23,35 @@ const THEME_INIT_SCRIPT = `(function(){try{var stored=window.localStorage.getIte
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({
     meta: [
-      {
-        charSet: 'utf-8',
-      },
+      { charSet: 'utf-8' },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
+        content: 'width=device-width, initial-scale=1, viewport-fit=cover',
       },
+      { title: 'ARK — 個人資產管理' },
       {
-        title: 'TanStack Start Starter',
+        name: 'description',
+        content: 'ARK 是一款注重隱私的個人資產管理工具，離線優先、端到端加密。',
       },
+      { name: 'theme-color', content: '#0d1117' },
     ],
-    links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
-    ],
+    links: [{ rel: 'stylesheet', href: appCss }],
   }),
   shellComponent: RootDocument,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="zh-TW" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
-      <body className="font-sans antialiased [overflow-wrap:anywhere] selection:bg-[rgba(79,184,178,0.24)]">
+      <body className="font-sans antialiased">
         <TanStackQueryProvider>
-          <Header />
-          {children}
-          <Footer />
+          <AppShell>{children}</AppShell>
           <TanStackDevtools
-            config={{
-              position: 'bottom-right',
-            }}
+            config={{ position: 'bottom-right' }}
             plugins={[
               {
                 name: 'Tanstack Router',

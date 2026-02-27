@@ -1,89 +1,190 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { AmountDisplay } from '@/components/ui/AmountDisplay'
+import { AccountIcon } from '@/components/ui/AccountIcon'
+import {
+  MOCK_ACCOUNTS,
+  MOCK_RECENT_TRANSACTIONS,
+  MOCK_MONTHLY_SPENDING,
+  getNetWorth,
+} from '@/lib/mock-data'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Tooltip,
+} from 'recharts'
+import { ArrowUpRight, ArrowDownRight, TrendingUp } from 'lucide-react'
 
-export const Route = createFileRoute('/')({ component: App })
+export const Route = createFileRoute('/')({
+  component: HomePage,
+})
 
-function App() {
+function HomePage() {
+  const netWorth = getNetWorth()
+  const thisMonth = MOCK_MONTHLY_SPENDING[MOCK_MONTHLY_SPENDING.length - 1]
+  const savingsRate = Math.round(
+    ((thisMonth.income - thisMonth.expense) / thisMonth.income) * 100,
+  )
+
   return (
-    <main className="page-wrap px-4 pb-8 pt-14">
-      <section className="island-shell rise-in relative overflow-hidden rounded-[2rem] px-6 py-10 sm:px-10 sm:py-14">
-        <div className="pointer-events-none absolute -left-20 -top-24 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(79,184,178,0.32),transparent_66%)]" />
-        <div className="pointer-events-none absolute -bottom-20 -right-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(47,106,74,0.18),transparent_66%)]" />
-        <p className="island-kicker mb-3">TanStack Start Base Template</p>
-        <h1 className="display-title mb-5 max-w-3xl text-4xl leading-[1.02] font-bold tracking-tight text-[var(--sea-ink)] sm:text-6xl">
-          Island hours, but for product teams.
-        </h1>
-        <p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-          A tropical, breathable app starter with full-document SSR, server
-          functions, streaming, and type-safe routing. Calm on the eyes. Fast in
-          production.
+    <div className="space-y-6 rise-in">
+      {/* Net Worth Hero */}
+      <section className="text-center py-6">
+        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">
+          淨資產
         </p>
-        <div className="flex flex-wrap gap-3">
-          <a
-            href="/blog"
-            className="rounded-full border border-[rgba(50,143,151,0.3)] bg-[rgba(79,184,178,0.14)] px-5 py-2.5 text-sm font-semibold text-[var(--lagoon-deep)] no-underline transition hover:-translate-y-0.5 hover:bg-[rgba(79,184,178,0.24)]"
-          >
-            Explore Posts
-          </a>
-          <a
-            href="https://tanstack.com/router"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full border border-[rgba(23,58,64,0.2)] bg-white/50 px-5 py-2.5 text-sm font-semibold text-[var(--sea-ink)] no-underline transition hover:-translate-y-0.5 hover:border-[rgba(23,58,64,0.35)]"
-          >
-            Router Guide
-          </a>
+        <AmountDisplay amount={netWorth} currency="TWD" size="xl" />
+        <div className="flex items-center justify-center gap-1 mt-2">
+          <TrendingUp size={14} className="text-positive-foreground" />
+          <span className="text-xs text-positive-foreground font-medium">
+            +2.3% 本月
+          </span>
         </div>
       </section>
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          [
-            'Type-Safe Routing',
-            'Routes and links stay in sync across every page.',
-          ],
-          [
-            'Server Functions',
-            'Call server code from your UI without creating API boilerplate.',
-          ],
-          [
-            'Streaming by Default',
-            'Ship progressively rendered responses for faster experiences.',
-          ],
-          [
-            'Tailwind Native',
-            'Design quickly with utility-first styling and custom tokens.',
-          ],
-        ].map(([title, desc], index) => (
-          <article
-            key={title}
-            className="island-shell feature-card rise-in rounded-2xl p-5"
-            style={{ animationDelay: `${index * 90 + 80}ms` }}
-          >
-            <h2 className="mb-2 text-base font-semibold text-[var(--sea-ink)]">
-              {title}
-            </h2>
-            <p className="m-0 text-sm text-[var(--sea-ink-soft)]">{desc}</p>
-          </article>
-        ))}
+      {/* Quick Stats */}
+      <section className="grid grid-cols-3 gap-2">
+        <div className="p-3 rounded-xl bg-card border border-border text-center">
+          <div className="flex items-center justify-center gap-1 mb-1">
+            <ArrowUpRight size={12} className="text-positive-foreground" />
+            <span className="text-[0.65rem] text-muted-foreground">收入</span>
+          </div>
+          <AmountDisplay amount={thisMonth.income} size="sm" />
+        </div>
+        <div className="p-3 rounded-xl bg-card border border-border text-center">
+          <div className="flex items-center justify-center gap-1 mb-1">
+            <ArrowDownRight size={12} className="text-negative-foreground" />
+            <span className="text-[0.65rem] text-muted-foreground">支出</span>
+          </div>
+          <AmountDisplay amount={-thisMonth.expense} size="sm" />
+        </div>
+        <div className="p-3 rounded-xl bg-card border border-border text-center">
+          <div className="flex items-center justify-center gap-1 mb-1">
+            <TrendingUp size={12} className="text-primary" />
+            <span className="text-[0.65rem] text-muted-foreground">儲蓄率</span>
+          </div>
+          <span className="text-sm font-semibold text-primary">
+            {savingsRate}%
+          </span>
+        </div>
       </section>
 
-      <section className="island-shell mt-8 rounded-2xl p-6">
-        <p className="island-kicker mb-2">Quick Start</p>
-        <ul className="m-0 list-disc space-y-2 pl-5 text-sm text-[var(--sea-ink-soft)]">
-          <li>
-            Edit <code>src/routes/index.tsx</code> to customize the hero and
-            product narrative.
-          </li>
-          <li>
-            Update <code>src/components/Header.tsx</code> and{' '}
-            <code>src/components/Footer.tsx</code> for brand links.
-          </li>
-          <li>
-            Add routes in <code>src/routes</code> and tweak visual tokens in{' '}
-            <code>src/styles.css</code>.
-          </li>
-        </ul>
+      {/* Monthly Chart */}
+      <section className="p-4 rounded-xl bg-card border border-border">
+        <h2 className="text-sm font-semibold mb-3">收支趨勢</h2>
+        <div className="h-40">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={MOCK_MONTHLY_SPENDING} barGap={2}>
+              <XAxis
+                dataKey="name"
+                tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis hide />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'var(--card)',
+                  border: '1px solid var(--border)',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                }}
+                formatter={(value: any) =>
+                  'NT$' + Number(value).toLocaleString()
+                }
+              />
+              <Bar
+                dataKey="income"
+                fill="var(--positive)"
+                radius={[4, 4, 0, 0]}
+                name="收入"
+              />
+              <Bar
+                dataKey="expense"
+                fill="var(--negative)"
+                radius={[4, 4, 0, 0]}
+                name="支出"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="flex items-center justify-center gap-4 mt-2">
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-sm bg-positive" />
+            <span className="text-[0.65rem] text-muted-foreground">收入</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-sm bg-negative" />
+            <span className="text-[0.65rem] text-muted-foreground">支出</span>
+          </div>
+        </div>
       </section>
-    </main>
+
+      {/* Accounts */}
+      <section>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-semibold">帳戶</h2>
+          <span className="text-xs text-primary font-medium">查看全部</span>
+        </div>
+        <div className="space-y-2">
+          {MOCK_ACCOUNTS.map((account) => (
+            <div
+              key={account.id}
+              className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border transition-colors hover:bg-accent/50"
+            >
+              <AccountIcon type={account.type} color={account.color} />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">{account.name}</p>
+                <p className="text-xs text-muted-foreground">
+                  {account.type === 'bank'
+                    ? '銀行'
+                    : account.type === 'cash'
+                      ? '現金'
+                      : account.type === 'e_payment'
+                        ? '電子支付'
+                        : account.type === 'credit_card'
+                          ? '信用卡'
+                          : '投資'}
+                </p>
+              </div>
+              <AmountDisplay amount={account.balance} size="sm" />
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Recent Transactions */}
+      <section>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-semibold">最近交易</h2>
+          <span className="text-xs text-primary font-medium">查看全部</span>
+        </div>
+        <div className="space-y-1">
+          {MOCK_RECENT_TRANSACTIONS.map((tx) => (
+            <div
+              key={tx.id}
+              className="flex items-center gap-3 py-2.5 px-3 rounded-lg transition-colors hover:bg-accent/50"
+            >
+              <span className="text-lg w-8 text-center flex-shrink-0">
+                {tx.categoryIcon}
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium truncate">{tx.note}</p>
+                <p className="text-xs text-muted-foreground">
+                  {tx.accountName} · {tx.date}
+                </p>
+              </div>
+              <AmountDisplay
+                amount={tx.amount}
+                size="sm"
+                showSign={tx.type === 'income'}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
   )
 }
