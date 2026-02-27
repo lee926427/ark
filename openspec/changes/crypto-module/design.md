@@ -1,6 +1,6 @@
 ## Context
 
-ARKARK PRO 訂閱需要 E2EE 雲端同步。此模組為純工具函式庫，不依賴 UI 或 DB 層。
+ARK PRO 訂閱需要 E2EE 雲端同步。此模組為純工具函式庫，不依賴 UI 或 DB 層。
 
 **約束**：
 

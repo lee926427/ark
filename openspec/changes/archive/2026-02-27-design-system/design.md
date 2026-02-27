@@ -1,6 +1,6 @@
 ## Context
 
-ARKARK 使用 TanStack Start 預設範本建立，目前外觀為範本預設樣式。需要建立專屬的暗色系財務風格設計系統，並提供 App Shell 佈局框架讓後續功能頁面可快速組裝。
+ARK 使用 TanStack Start 預設範本建立，目前外觀為範本預設樣式。需要建立專屬的暗色系財務風格設計系統，並提供 App Shell 佈局框架讓後續功能頁面可快速組裝。
 
 **約束**：
 
@@ -12,7 +12,7 @@ ARKARK 使用 TanStack Start 預設範本建立，目前外觀為範本預設樣
 
 **Goals:**
 
-- 建立 ARKARK 暗色系財務風格色彩與排版系統
+- 建立 ARK 暗色系財務風格色彩與排版系統
 - 客製化 shadcn/ui 元件
 - 建立 App Shell（底部導航 + 頂部標題 + 內容區）
 - 建立共用業務元件（AmountDisplay, AccountIcon）

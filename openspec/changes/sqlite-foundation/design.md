@@ -1,6 +1,6 @@
 ## Context
 
-ARKARK 是隱私優先的個人資產管理 Web App，所有原始數據留在瀏覽器本地 SQLite。目前專案已完成 TanStack Start 腳手架，但尚無資料庫層。此 feature branch (`feature/sqlite-foundation`) 負責建立完整的本地資料庫基礎設施。
+ARK 是隱私優先的個人資產管理 Web App，所有原始數據留在瀏覽器本地 SQLite。目前專案已完成 TanStack Start 腳手架，但尚無資料庫層。此 feature branch (`feature/sqlite-foundation`) 負責建立完整的本地資料庫基礎設施。
 
 **現狀**：專案無任何資料持久化能力，前端元件無法存取或操作財務數據。
 
