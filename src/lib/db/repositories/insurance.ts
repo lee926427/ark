@@ -1,4 +1,4 @@
-import type { Database } from 'sql.js'
+import type { Database } from '@/lib/db/client'
 import type {
   InsurancePolicy,
   CreateInsurancePolicy,

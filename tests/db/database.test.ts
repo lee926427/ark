@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import initSqlJs, { type Database } from 'sql.js'
+import sqlite3InitModule from '@sqlite.org/sqlite-wasm'
+import { DbFacade, type Database } from '@/lib/db/client'
 import { runMigrations, getSchemaVersion } from '@/lib/db/migrations'
 import { AccountRepository } from '@/lib/db/repositories/accounts'
 import { TransactionRepository } from '@/lib/db/repositories/transactions'
@@ -8,8 +9,9 @@ import { HoldingRepository } from '@/lib/db/repositories/holdings'
 let db: Database
 
 beforeEach(async () => {
-  const SQL = await initSqlJs()
-  db = new SQL.Database()
+  const sqlite3 = await sqlite3InitModule()
+  const rawDb = new sqlite3.oo1.DB('/test' + Math.random() + '.sqlite3', 'c') // unique in-memory db per test
+  db = new DbFacade(rawDb)
   db.run('PRAGMA foreign_keys = ON')
   runMigrations(db)
 })
@@ -24,8 +26,12 @@ afterEach(() => {
 
 describe('Migrations', () => {
   it('should migrate from version 0 to latest', async () => {
-    const SQL = await initSqlJs()
-    const freshDb = new SQL.Database()
+    const sqlite3 = await sqlite3InitModule()
+    const rawDb = new sqlite3.oo1.DB(
+      '/test-fresh' + Math.random() + '.sqlite3',
+      'c',
+    )
+    const freshDb = new DbFacade(rawDb)
     expect(getSchemaVersion(freshDb)).toBe(0)
     runMigrations(freshDb)
     expect(getSchemaVersion(freshDb)).toBe(1)

@@ -1,4 +1,4 @@
-import type { Database } from 'sql.js'
+import type { Database } from '@/lib/db/client'
 import { SCHEMA_DDL, SCHEMA_VERSION } from '@/lib/db/schema'
 import { ALL_VIEWS } from '@/lib/db/views'
 
