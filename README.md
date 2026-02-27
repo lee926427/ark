@@ -1,213 +1,124 @@
-Welcome to your new TanStack Start app! 
+# 🚢 ARKARK — 你的財務方舟
 
-# Getting Started
+> **A**utonomous · **R**esilient · **K**ernel
 
-To run this application:
+隱私優先的個人資產管理 Web App。所有原始數據保留在本地 SQLite，僅同步加密指紋至雲端。
 
-```bash
-npm install
-npm run dev
+## 核心理念
+
+| 字母  | 意義       | 說明                                          |
+| ----- | ---------- | --------------------------------------------- |
+| **A** | Autonomous | 所有資產連動與邏輯都在本地端完成              |
+| **R** | Resilient  | 韌性管理，穩健運行                            |
+| **K** | Kernel     | 原始數據留在本地 SQLite，僅同步加密指紋至雲端 |
+
+## 技術架構
+
+```
+┌─────────────────────────────────────────┐
+│            Client (Browser)             │
+│  ┌──────────┐ ┌──────────┐ ┌─────────┐ │
+│  │ TanStack │ │ SQLite   │ │ Web     │ │
+│  │ Start    │ │ WASM     │ │ Crypto  │ │
+│  │ (React)  │ │ (OPFS)   │ │ (E2EE)  │ │
+│  └────┬─────┘ └────┬─────┘ └────┬────┘ │
+│       │            │            │       │
+└───────┼────────────┼────────────┼───────┘
+        │            │            │
+        └────────────┼────────────┘
+                     ▼
+         ┌───────────────────┐
+         │  Cloud (Optional) │
+         │  Encrypted Sync   │
+         └───────────────────┘
 ```
 
-# Building For Production
+| 層級       | 技術                        | 用途                      |
+| ---------- | --------------------------- | ------------------------- |
+| 前端框架   | TanStack Start (React 19)   | BFF 架構，端到端型別安全  |
+| 本地資料庫 | sql.js (SQLite WASM) + OPFS | 瀏覽器內 SQL 查詢與持久化 |
+| 狀態管理   | TanStack Query              | 查詢快取 + 樂觀更新       |
+| 數據安全   | Web Crypto API (AES-GCM)    | 端到端加密                |
+| 樣式系統   | Tailwind CSS v4 + shadcn/ui | 快速開發 + 無障礙元件     |
+| 測試       | Vitest + Testing Library    | 單元測試 + 元件測試       |
 
-To build this application for production:
+## 功能特色
 
-```bash
-npm run build
-```
+- 📊 **資產總覽** — 即時計算淨值、持倉市值與損益
+- 💰 **快速記帳** — 通勤場景最佳化的極速入帳體驗
+- 🏦 **帳戶管理** — 銀行、電子支付、現金、信用卡、投資帳戶
+- 📈 **持倉管理** — 股票、ETF、基金、加密貨幣追蹤
+- 🛡️ **保險保單** — 投資型保單連結基金淨值自動聯動
+- ❤️‍🩹 **財務健康檢查** — 緊急預備金覆蓋率、風險資產比例
+- 🔐 **E2EE 加密** — 雲端同步資料端到端加密，開發者也無法讀取
+- 📊 **數據指紋化** — 僅同步聚合後的資產比例與健康指標
 
-## Testing
+## 資料庫設計
 
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
+透過三層 SQLite View 封裝複雜邏輯：
 
-```bash
-npm run test
-```
+| View                       | 用途                                         |
+| -------------------------- | -------------------------------------------- |
+| `v_assets_summary`         | 整合帳戶、持倉與標的價格，計算即時市值與損益 |
+| `v_account_balances`       | 結合交易流水，動態計算帳戶餘額               |
+| `v_financial_health_check` | 計算緊急預備金覆蓋率、風險資產比例等核心指標 |
 
-## Styling
-
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-### Removing Tailwind CSS
-
-If you prefer not to use Tailwind CSS:
-
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Uninstall the packages: `npm install @tailwindcss/vite tailwindcss -D`
-
-## Linting & Formatting
-
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
+## 開始使用
 
 ```bash
-npm run lint
-npm run format
-npm run check
+# 安裝依賴
+pnpm install
+
+# 開發模式
+pnpm dev
+
+# 建置
+pnpm build
+
+# 測試
+pnpm test
+
+# Lint & Format
+pnpm lint
+pnpm format
 ```
 
-
-## Shadcn
-
-Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
+## 新增 UI 元件
 
 ```bash
 pnpm dlx shadcn@latest add button
 ```
 
+## 專案結構
 
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
+```
+ark/
+├── src/
+│   ├── routes/              # TanStack Router 檔案式路由
+│   ├── components/          # 共用元件
+│   ├── integrations/        # 第三方整合 (TanStack Query)
+│   ├── lib/
+│   │   ├── db/              # SQLite WASM + Repository
+│   │   ├── crypto/          # E2EE 加解密工具
+│   │   ├── sync/            # 同步引擎
+│   │   └── utils/           # 工具函式
+│   ├── styles.css           # 全域樣式 (Tailwind v4)
+│   └── router.tsx           # Router 設定
+├── public/                  # 靜態資源
+├── tests/                   # 測試檔案
+├── .agent/skills/           # AI 開發技能包
+├── vite.config.ts
+├── tsconfig.json
+└── package.json
 ```
 
-Then anywhere in your JSX you can use it like so:
+## 商業模式
 
-```tsx
-<Link to="/about">About</Link>
-```
+| 方案         | 內容                               |
+| ------------ | ---------------------------------- |
+| **免費版**   | 本地資產管理，所有核心功能         |
+| **PRO 訂閱** | E2EE 跨裝置同步 + 深度同儕分析報告 |
 
-This will create a link that will navigate to the `/about` route.
+## License
 
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-  
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-  
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+Private — All rights reserved.
