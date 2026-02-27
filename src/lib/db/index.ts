@@ -3,17 +3,23 @@
 // ========================================
 
 // Client
-export { getDB, closeDB, persistDB } from './client'
+export { getDB, closeDB, persistDB } from '@/lib/db/client'
 
 // Migrations
-export { runMigrations, getSchemaVersion, SCHEMA_VERSION } from './migrations'
+export {
+  runMigrations,
+  getSchemaVersion,
+  SCHEMA_VERSION,
+} from '@/lib/db/migrations'
 
 // Repositories
-export { AccountRepository } from './repositories/accounts'
-export { TransactionRepository } from './repositories/transactions'
-export { HoldingRepository } from './repositories/holdings'
-export { BudgetRepository } from './repositories/budgets'
-export { InsuranceRepository } from './repositories/insurance'
+export {
+  AccountRepository,
+  TransactionRepository,
+  HoldingRepository,
+  BudgetRepository,
+  InsuranceRepository,
+} from '@/lib/db/repositories'
 
 // Types
 export type {
@@ -52,4 +58,4 @@ export type {
   InsuranceType,
   PremiumFrequency,
   BudgetPeriod,
-} from './types'
+} from '@/lib/db/types'

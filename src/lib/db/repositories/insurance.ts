@@ -3,7 +3,7 @@ import type {
   InsurancePolicy,
   CreateInsurancePolicy,
   UpdateInsurancePolicy,
-} from '../types'
+} from '@/lib/db/types'
 
 function generateId(): string {
   const bytes = new Uint8Array(8)

@@ -1,5 +1,5 @@
 import initSqlJs, { type Database } from 'sql.js'
-import { runMigrations } from './migrations'
+import { runMigrations } from '@/lib/db/migrations'
 
 let dbInstance: Database | null = null
 let initPromise: Promise<Database> | null = null

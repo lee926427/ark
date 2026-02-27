@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite'
+import path from 'path'
 import { devtools } from '@tanstack/devtools-vite'
 import contentCollections from '@content-collections/vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
@@ -9,6 +10,11 @@ import viteReact from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 const config = defineConfig({
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
   plugins: [
     devtools(),
     contentCollections(),

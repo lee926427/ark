@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import initSqlJs, { type Database } from 'sql.js'
-import { runMigrations, getSchemaVersion } from '../../src/lib/db/migrations'
-import { AccountRepository } from '../../src/lib/db/repositories/accounts'
-import { TransactionRepository } from '../../src/lib/db/repositories/transactions'
-import { HoldingRepository } from '../../src/lib/db/repositories/holdings'
+import { runMigrations, getSchemaVersion } from '@/lib/db/migrations'
+import { AccountRepository } from '@/lib/db/repositories/accounts'
+import { TransactionRepository } from '@/lib/db/repositories/transactions'
+import { HoldingRepository } from '@/lib/db/repositories/holdings'
 
 let db: Database
 

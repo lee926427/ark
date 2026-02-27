@@ -1,6 +1,6 @@
 import type { Database } from 'sql.js'
-import { SCHEMA_DDL, SCHEMA_VERSION } from './schema'
-import { ALL_VIEWS } from './views'
+import { SCHEMA_DDL, SCHEMA_VERSION } from '@/lib/db/schema'
+import { ALL_VIEWS } from '@/lib/db/views'
 
 /**
  * Migration definition

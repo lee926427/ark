@@ -1,5 +1,5 @@
 import type { Database } from 'sql.js'
-import type { Account, CreateAccount, UpdateAccount } from '../types'
+import type { Account, CreateAccount, UpdateAccount } from '@/lib/db/types'
 
 function generateId(): string {
   const bytes = new Uint8Array(8)
